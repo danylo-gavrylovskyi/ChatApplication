@@ -1,6 +1,6 @@
 #include "DataStreamer.h"
 
-char* DataStreamer::receiveChunkedData(const SOCKET& clientSocket) const {
+std::vector<char> DataStreamer::receiveChunkedData(const SOCKET& clientSocket) const {
 	int32_t totalSize = 0;
 	int bytesReceived = recv(clientSocket, reinterpret_cast<char*>(&totalSize), sizeof(int), 0);
 	if (bytesReceived == SOCKET_ERROR || bytesReceived == 0) {
@@ -8,19 +8,19 @@ char* DataStreamer::receiveChunkedData(const SOCKET& clientSocket) const {
 		std::cerr << "Error in receiving total size." << std::endl;
 	}
 
-	int chunkSize = 0;
+	int32_t chunkSize = 0;
 	bytesReceived = recv(clientSocket, reinterpret_cast<char*>(&chunkSize), sizeof(int), 0);
 	if (bytesReceived == SOCKET_ERROR || bytesReceived == 0) {
 		std::lock_guard<std::mutex> lock(const_cast<std::mutex&>(this->mtx));
 		std::cerr << "Error in receiving chunk size." << std::endl;
 	}
 
-	char* assembledData = new char[totalSize + 1];
+	std::vector<char> assembledData(totalSize + 1);
 	int totalReceived = 0;
 
 	while (totalReceived < totalSize) {
-		char* buffer = new char[chunkSize];
-		int bytesReceived = recv(clientSocket, buffer, sizeof(buffer), 0);
+		std::vector<char> buffer(chunkSize);
+		int bytesReceived = recv(clientSocket, buffer.data(), sizeof(buffer), 0);
 
 		if (bytesReceived == SOCKET_ERROR || bytesReceived == 0) {
 			std::lock_guard<std::mutex> lock(const_cast<std::mutex&>(this->mtx));
@@ -28,12 +28,11 @@ char* DataStreamer::receiveChunkedData(const SOCKET& clientSocket) const {
 			break;
 		}
 
-		memcpy(assembledData + totalReceived, buffer, bytesReceived);
+		std::copy(buffer.begin(), buffer.begin() + bytesReceived, assembledData.begin() + totalReceived);
 		totalReceived += bytesReceived;
 	}
 
-	assembledData[totalReceived] = '\0';
-
+	assembledData[totalSize] = '\0';
 	return assembledData;
 }
 int DataStreamer::receiveChunkedDataToFile(const SOCKET& clientSocket, const std::string& pathToFile, const FileHandler& fileHandler) const {

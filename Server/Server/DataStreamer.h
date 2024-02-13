@@ -11,7 +11,7 @@ class IDataStreamer {
 public:
 	virtual ~IDataStreamer() {}
 
-	virtual char* receiveChunkedData(const SOCKET& clientSocket) const = 0;
+	virtual std::vector<char> receiveChunkedData(const SOCKET& clientSocket) const = 0;
 	virtual int receiveChunkedDataToFile(const SOCKET& clientSocket, const std::string& pathToFile, const FileHandler& fileHandler) const = 0;
 
 	virtual int sendFileUsingChunks(const SOCKET& clientSocket, std::string&& pathToFile, int chunkSize) const = 0;
@@ -21,7 +21,7 @@ public:
 class DataStreamer: public IDataStreamer {
 	std::mutex mtx;
 public:
-	char* receiveChunkedData(const SOCKET& clientSocket) const override;
+	std::vector<char> receiveChunkedData(const SOCKET& clientSocket) const override;
 	int receiveChunkedDataToFile(const SOCKET& clientSocket, const std::string& pathToFile, const FileHandler& fileHandler) const override;
 
 	int sendFileUsingChunks(const SOCKET& clientSocket, std::string&& pathToFile, int chunkSize) const override;
