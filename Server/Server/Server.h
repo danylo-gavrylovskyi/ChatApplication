@@ -11,6 +11,7 @@
 #include "DataStreamer.h"
 #include "Room.h"
 #include "User.h"
+#include "Message.h"
 
 class IServer {
 public:
@@ -24,7 +25,7 @@ class Server: public IServer {
 	std::mutex& consoleMtx;
 	std::mutex msgQueueMtx;
 	std::vector<Room> rooms;
-	std::queue<std::string> messageQueue;
+	std::queue<Message> messageQueue;
 	std::condition_variable isNewMessage;
 public:
 	Server(std::mutex& consoleMtx);
@@ -34,9 +35,9 @@ public:
 	int start(Socket& serverSocket, const int port, const FileHandler& fileHandler) override;
 	void handleClient(const SOCKET& clientSocket, const FileHandler& fileHandler, const DataStreamer& dataStreamer) override;
 
-	void pushToQueue(const std::string& msg);
-	void broadcastMessage(const std::string& msg, const SOCKET clientSocket, Room& room, const DataStreamer& dataStreamer);
-	void incomingMessageHandler(SOCKET clientSocket, const DataStreamer& dataStreamer, const int roomId);
+	void pushToQueue(const Message& msg);
+	void broadcastMessage(const Message& msg, const DataStreamer& dataStreamer);
+	void incomingMessageHandler(const DataStreamer& dataStreamer);
 
 	Room& getRoomById(const int roomId);
 };
