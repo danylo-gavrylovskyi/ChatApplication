@@ -10,7 +10,7 @@ class Room {
 public:
 	Room(int roomId);
 	Room(const Room& other) = delete;
-	Room(Room&& other) = delete;
+	Room(Room&& other);
 
 	int getId() const;
 

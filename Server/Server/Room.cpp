@@ -1,6 +1,7 @@
 #include "Room.h"
 
 Room::Room(int roomId): id(roomId){}
+Room::Room(Room&& other): id(other.id), clients(other.clients){}
 
 int Room::getId() const
 {
