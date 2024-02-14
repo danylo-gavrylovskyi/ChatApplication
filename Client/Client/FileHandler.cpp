@@ -1,1 +1,1 @@
-#include "../../FileTransferTCP-Server/FileTransferTCP-Server/FileHandler.cpp"
+#include "../../Server/Server/FileHandler.cpp"

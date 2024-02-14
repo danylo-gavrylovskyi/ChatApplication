@@ -23,4 +23,6 @@ public:
 	CLI(CLI&&) = delete;
 
 	void run(const SOCKET& clientSocket, const FileHandler& fileHandler, const DataStreamer& dataStreamer) override;
+
+	void receiveMessages(SOCKET clientSocket, const DataStreamer& dataStreamer);
 };
