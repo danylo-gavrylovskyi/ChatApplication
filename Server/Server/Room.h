@@ -16,4 +16,5 @@ public:
 
 	std::vector<User>& getClients();
 	void addClient(const User& clientSocket);
+	void removeClient(const User& user);
 };

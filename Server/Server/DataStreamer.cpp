@@ -66,6 +66,16 @@ int DataStreamer::receiveChunkedDataToFile(const SOCKET& clientSocket, const std
 
 	return 0;
 }
+int DataStreamer::receiveInt(const SOCKET& clientSocket) const {
+	int32_t data;
+	int bytesReceived = recv(clientSocket, reinterpret_cast<char*>(&data), sizeof(int32_t), 0);
+	if (bytesReceived == SOCKET_ERROR || bytesReceived == 0) {
+		std::lock_guard<std::mutex> lock(consoleMtx);
+		std::cerr << "Error while receiving room id." << std::endl;
+		return -1;
+	}
+	return data;
+}
 
 int DataStreamer::sendFileUsingChunks(const SOCKET& clientSocket, std::string&& pathToFile, int chunkSize) const {
 	std::ifstream isize(pathToFile, std::ifstream::ate | std::ifstream::binary);

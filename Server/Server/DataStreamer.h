@@ -13,6 +13,7 @@ public:
 
 	virtual std::string receiveMessage(const SOCKET& clientSocket) const = 0;
 	virtual int receiveChunkedDataToFile(const SOCKET& clientSocket, const std::string& pathToFile, const FileHandler& fileHandler) const = 0;
+	virtual int receiveInt(const SOCKET& clientSocket) const = 0;
 
 	virtual int sendFileUsingChunks(const SOCKET& clientSocket, std::string&& pathToFile, int chunkSize) const = 0;
 	virtual int sendMessage(const SOCKET& clientSocket, const std::string& message) const = 0;
@@ -25,6 +26,7 @@ public:
 
 	std::string receiveMessage(const SOCKET& clientSocket) const override;
 	int receiveChunkedDataToFile(const SOCKET& clientSocket, const std::string& pathToFile, const FileHandler& fileHandler) const override;
+	int receiveInt(const SOCKET& clientSocket) const override;
 
 	int sendFileUsingChunks(const SOCKET& clientSocket, std::string&& pathToFile, int chunkSize) const override;
 	int sendMessage(const SOCKET& clientSocket, const std::string& message) const override;

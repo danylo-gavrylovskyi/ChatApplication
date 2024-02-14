@@ -12,8 +12,7 @@
 
 int main()
 {
-	std::mutex mtx;
-	std::lock_guard<std::mutex> locker(mtx);
+	std::mutex consoleMtx;
 
 	const int PORT = 12345;
 
@@ -22,7 +21,7 @@ int main()
 
 	FileHandler fileHandler;
 
-	Server server(locker);
+	Server server(consoleMtx);
 	server.start(serverSocket, PORT, fileHandler);
 
 	return 0;
