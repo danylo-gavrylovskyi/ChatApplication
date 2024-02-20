@@ -16,9 +16,9 @@ public:
 
 class Socket: public ISocket {
 	SOCKET mainSocket;
-	std::mutex mtx;
+	std::mutex& consoleMtx;
 public:
-	Socket();
+	Socket(std::mutex& consoleMtx);
 	Socket(const Socket&) = delete;
 	Socket(Socket&&) = delete;
 

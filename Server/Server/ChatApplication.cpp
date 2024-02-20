@@ -16,7 +16,7 @@ int main()
 
 	const int PORT = 12345;
 
-	Socket serverSocket;
+	Socket serverSocket(consoleMtx);
 	serverSocket.startUp(PORT);
 
 	FileHandler fileHandler;

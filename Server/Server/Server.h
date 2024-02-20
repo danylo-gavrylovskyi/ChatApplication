@@ -1,7 +1,5 @@
 #pragma once
 
-#include <filesystem>
-
 #include <thread>
 #include <vector>
 #include <queue>
@@ -24,11 +22,20 @@ public:
 class Server: public IServer {
 	std::mutex& consoleMtx;
 	std::mutex msgQueueMtx;
+	std::mutex roomMtx;
+	std::mutex allFilesReceivedMtx;
+
 	std::vector<Room> rooms;
+
 	std::queue<Message> messageQueue;
 	std::condition_variable isNewMessage;
+	std::condition_variable fileReceived;
 
-	DataStreamer dataStreamer;
+	int numOfReceivedFiles = 0;
+
+	const std::string SERVER_STORAGE = "C:/Meine/KSE/ClientServer/ChatApplication/server_storage/";
+
+	const DataStreamer dataStreamer;
 public:
 	Server(std::mutex& consoleMtx);
 	Server(const Server&) = delete;
@@ -46,4 +53,8 @@ public:
 	// room logic
 	Room& getRoomById(const int roomId);
 	void joinRoom(const int roomId, const User& user);
+	int getNumOfClients(const int roomId);
+
+	//other
+	void incrementNumOfReceivedFiles(int toBeReceived);
 };

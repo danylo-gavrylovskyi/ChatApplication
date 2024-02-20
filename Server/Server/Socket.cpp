@@ -1,6 +1,6 @@
 #include "Socket.h"
 
-Socket::Socket(){}
+Socket::Socket(std::mutex& consoleMtx): consoleMtx(consoleMtx){}
 
 int Socket::startUp(int port) {
 	// Initialize Winsock
@@ -48,7 +48,7 @@ SOCKET& Socket::acceptConnection() {
 	SOCKET clientSocket = accept(this->mainSocket, nullptr, nullptr);
 	if (clientSocket == INVALID_SOCKET)
 	{
-		std::lock_guard<std::mutex> lock(this->mtx);
+		std::lock_guard<std::mutex> lock(consoleMtx);
 		std::cerr << "Accept failed with error: " << WSAGetLastError() << std::endl;
 	}
 

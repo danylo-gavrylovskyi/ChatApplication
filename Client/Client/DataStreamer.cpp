@@ -8,7 +8,7 @@ std::string DataStreamer::receiveMessage(const SOCKET& clientSocket) const {
 	}
 
 	std::vector<char> buffer(totalSize + 1);
-	bytesReceived = recv(clientSocket, buffer.data(), sizeof(buffer), 0);
+	bytesReceived = recv(clientSocket, buffer.data(), totalSize, 0);
 
 	if (bytesReceived == SOCKET_ERROR || bytesReceived == 0) {
 		std::cerr << "Error in receiving chunked data." << std::endl;
@@ -34,8 +34,6 @@ int DataStreamer::receiveChunkedDataToFile(const SOCKET& clientSocket, const std
 			return -1;
 		}
 
-		std::cout << "Received chunk of size: " << chunkSize << std::endl;
-
 		std::vector<char> buffer(chunkSize + 1, 0);
 		int bytesReceived = recv(clientSocket, buffer.data(), chunkSize, 0);
 		if (bytesReceived == SOCKET_ERROR || bytesReceived == 0) {
@@ -44,6 +42,7 @@ int DataStreamer::receiveChunkedDataToFile(const SOCKET& clientSocket, const std
 		}
 
 		buffer[chunkSize] = '\0';
+
 		fileHandler.appendDataToFile(pathToFile, buffer.data());
 		totalReceived += bytesReceived;
 	}
@@ -74,7 +73,6 @@ int DataStreamer::sendFileUsingChunks(const SOCKET& clientSocket, std::string&& 
 
 			std::vector<char> buffer(currentChunkSize, 0);
 
-			std::cout << "Sent chunk of size: " << currentChunkSize << std::endl;
 			if (send(clientSocket, reinterpret_cast<const char*>(&currentChunkSize), sizeof(long long), 0) == SOCKET_ERROR) {
 				std::cerr << "Failed to send chunk size." << std::endl;
 				return -1;
