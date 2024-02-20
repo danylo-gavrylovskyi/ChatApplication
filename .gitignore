@@ -8,3 +8,4 @@ Server.vcxproj
 Client.vcxproj.user
 Client.vcxproj.filters
 Client.vcxproj
+server_storage
