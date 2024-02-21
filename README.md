@@ -71,8 +71,10 @@ The communication protocol is based on simple text messages exchanged between th
 # 4. Explanation of Different Use Cases Using UML Diagrams and Code Examples
 
 ### Sequence Diagram
+![chat_application_sequence_diagram](https://github.com/danylo-gavrylovskyi/ChatApplication/assets/118884527/42fc3fb3-aa9b-43c5-8d23-b5e880833373)
 
 ### Use Case Diagram
+![chat_application_usecase_diagram](https://github.com/danylo-gavrylovskyi/ChatApplication/assets/118884527/3be4fead-9ef7-423d-9f2b-63786f2ef1bd)
 
 ## Code Examples
 
